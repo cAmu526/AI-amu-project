@@ -1,0 +1,18 @@
+目录结构：
+config：apikey配置、tool工具配置
+utils：对复用工具的封装
+document：rag系统源文档存储目录
+logs：日志目录
+demo：各部分功能演示目录
+agent：各类agent目录
+workflow.py 工作流
+main.py fastapi启动文件
+
+
+# demo:
+连接llm
+LangGraph构建聊天机器人
+有记忆的聊天机器人
+rag系统
+tools：function call、mcp服务
+langsmith监控

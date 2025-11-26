@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15        # 指定具体版本
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: postgres
+      TZ: Asia/Shanghai       # 设置时区
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:             # 健康检查
+      test: ["CMD", "pg_isready", "-U", "admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: ["postgres", "-c", "max_connections=200"]  # 自定义配置
+
+  redis:
+      #  使用 Redis Stack 镜像，它包含了 RediSearch (redis checkpoint需要用到这个模块)
+      image: redis/redis-stack:latest
+      container_name: redis_cache
+      ports:
+        - "6379:6379"                # 默认 Redis 端口
+      volumes:
+        - redisdata:/data            # 持久化数据（可选）
+      restart: unless-stopped
+      environment:
+        REDIS_ARGS: "--requirepass 123456"
+        TZ: "Asia/Shanghai" # 设置为你期望的时区
+
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+#
+## ==================== Milvus Standalone ====================
+#  etcd:
+#    container_name: milvus-etcd
+#    image: quay.io/coreos/etcd:v3.5.18
+#    environment:
+#      - ETCD_AUTO_COMPACTION_MODE=revision
+#      - ETCD_AUTO_COMPACTION_RETENTION=1000
+#      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+#      - ETCD_SNAPSHOT_COUNT=50000
+#    volumes:
+#      - etcd-data:/etcd
+#    command: etcd -advertise-client-urls=http://etcd:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+#    healthcheck:
+#      test: ["CMD", "etcdctl", "endpoint", "health"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#
+#  minio:
+#    container_name: milvus-minio
+#    image: minio/minio:RELEASE
+#    environment:
+#      MINIO_ROOT_USER: minioadmin
+#      MINIO_ROOT_PASSWORD: minioadmin
+#    ports:
+#      - "9000:9000"   # MinIO 控制台 API
+#      - "9001:9001"   # MinIO 控制台 Web UI
+#    volumes:
+#      - minio-data:/minio_data
+#    command: minio server /minio_data --console-address ":9001"
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#
+#  milvus-standalone:
+#    container_name: milvus-standalone
+#    image: milvusdb/milvus:v2.4.8
+#    command: ["milvus", "run", "standalone"]
+#    environment:
+#      ETCD_ENDPOINTS: etcd:2379
+#      MINIO_ADDRESS: minio:9000
+#      MINIO_ACCESS_KEY: minioadmin
+#      MINIO_SECRET_KEY: minioadmin
+#    ports:
+#      - "19530:19530"  # Milvus gRPC 端口（客户端连接用）
+#      - "9091:9091"    # Prometheus metrics（可选）
+#    depends_on:
+#      - "etcd"
+#      - "minio"
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
+#  etcd-data:
+#  minio-data:
