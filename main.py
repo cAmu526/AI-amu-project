@@ -5,7 +5,6 @@ from typing import Optional
 from langchain_core.messages import HumanMessage
 from utils.logger import get_logger
 
-# from workflow import create_langgraph_app  # 假设你的上述代码保存在 workflow.py 中
 from demo.langgraph构建聊天机器人 import create_langgraph_app
 
 logger = get_logger(__name__)
@@ -31,10 +30,8 @@ async def chat(request: ChatRequest):
         inputs = {"messages": [HumanMessage(content=request.message)]}
         config = {"configurable": {"thread_id": request.thread_id}}
 
-        # 执行图：使用 invoke 而非 stream（简化首次集成）
         final_state = langgraph_app.invoke(inputs, config=config)
 
-        # 提取最后一条 AI 消息
         ai_message = None
         for msg in reversed(final_state["messages"]):
             if hasattr(msg, 'content') and not isinstance(msg, HumanMessage):

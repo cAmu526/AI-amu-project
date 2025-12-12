@@ -10,17 +10,14 @@ tools = TOOLS
 tool_map = TOOL_MAP
 
 
-# 2. 定义状态
 class State(TypedDict):
     messages: Annotated[list, add_messages]
 
 
-# 3. 初始化模型并绑定工具
 llm = get_llm()
 llm_with_tools = llm.bind_tools(tools)
 
 
-# 4. 定义节点函数
 def call_model(state: State):
     messages = state["messages"]
     response = llm_with_tools.invoke(messages)
@@ -47,7 +44,6 @@ def call_tool(state: State):
     return {"messages": results}
 
 
-# 5. 定义条件边：是否需要调用工具？
 def should_continue(state: State) -> Literal["call_tool", "__end__"]:
     last_message = state["messages"][-1]
     if hasattr(last_message, "tool_calls") and len(last_message.tool_calls) > 0:
@@ -55,7 +51,6 @@ def should_continue(state: State) -> Literal["call_tool", "__end__"]:
     return "__end__"
 
 
-# 6. 构建图
 graph = StateGraph(State)
 graph.add_node("call_model", call_model)
 graph.add_node("call_tool", call_tool)
@@ -66,7 +61,6 @@ graph.add_edge("call_tool", "call_model")
 
 app = graph.compile()
 
-# 7. 运行示例
 if __name__ == "__main__":
     # inputs = {"messages": [{"role": "user", "content": "北京的天气怎么样？"}]}
     # inputs = {"messages": [{"role": "user", "content": "120加上3等于多少？"}]}

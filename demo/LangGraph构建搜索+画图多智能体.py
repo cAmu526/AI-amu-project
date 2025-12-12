@@ -10,14 +10,6 @@ class State(TypedDict):
     sender: str
 
 
-def researcher2(state: State):
-    res = research_agent.invoke({"input": state["messages"][-1].content})
-    return {
-        "messages": [AIMessage(content=res["output"], name="researcher")],
-        "sender": "researcher"
-    }
-
-
 def researcher(state: State):
     # 注意：create_agent 接收 {"messages": [...]}，不是 {"input": ...}
     last_msg = state["messages"][-1]
@@ -30,13 +22,6 @@ def researcher(state: State):
     return {
         "messages": [AIMessage(content=final_message.content, name="researcher")],
         "sender": "researcher"
-    }
-
-def chart_gen2(state: State):
-    res = chart_agent.invoke({"input": state["messages"][-1].content})
-    return {
-        "messages": [AIMessage(content=res["output"], name="chart")],
-        "sender": "chart"
     }
 
 
@@ -73,7 +58,6 @@ if __name__ == "__main__":
     mermaid_code = graph.get_graph().draw_mermaid()
     print("\n\n=== Mermaid 流程图代码 ===")
     print(mermaid_code)
-    print("\n复制以上代码到 https://mermaid.live 查看图形")
 
     # query = "查询 2020-2024 年全球 AI 软件市场规模，然后画一张折线图。"
     # thread = {"configurable": {"thread_id": "demo"}}
