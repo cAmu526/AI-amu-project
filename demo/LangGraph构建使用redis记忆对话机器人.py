@@ -37,7 +37,7 @@ if __name__ == "__main__":
     app = create_langgraph_app()
     config = {"configurable": {"thread_id": "user_test_1"}}  # 关键！必须有 thread_id
     while True:
-        user_input = input("👤 You: ")
+        user_input = input("You: ")
         if user_input.lower() in ["退出", "exit", "quit"]:
             break
 
@@ -46,4 +46,4 @@ if __name__ == "__main__":
         for chunk in app.stream(inputs, config=config):
             if "call_model_node" in chunk:
                 ai_msg = chunk["call_model_node"]["messages"][-1]
-                print(f"🤖 Bot: {ai_msg.content}")
+                print(f"Bot: {ai_msg.content}")

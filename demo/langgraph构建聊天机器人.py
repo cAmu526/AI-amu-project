@@ -35,7 +35,7 @@ if __name__ == "__main__":
     app = create_langgraph_app()
     messages = []
     while True:
-        user_input = input("👤 You: ")
+        user_input = input("You: ")
         if user_input.lower() in ["退出", "exit", "quit"]:
             break
         messages.append(HumanMessage(content=user_input))
@@ -44,5 +44,5 @@ if __name__ == "__main__":
         for chunk in app.stream(inputs):
             if "call_model_node" in chunk:
                 ai_msg = chunk["call_model_node"]["messages"][-1]
-                print(f"🤖 Bot: {ai_msg.content}")
+                print(f"Bot: {ai_msg.content}")
                 messages.append(ai_msg)  # 保存 AI 回复，用于下一轮

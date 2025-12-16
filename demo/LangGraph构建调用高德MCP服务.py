@@ -79,11 +79,11 @@ async def main():
 async def test():
     app = await create_langgraph_app()
     user_query = "帮我查一下深圳龙华未来三天的天气，并给出穿衣建议。"
-    print(f"\n👤 用户: {user_query}\n")
+    print(f"\n用户: {user_query}\n")
     inputs = {"messages": [HumanMessage(content=user_query)]}
 
     result = await app.ainvoke(inputs)
-    print("\n🤖 最终回答:")
+    print("\n最终回答:")
     print(result["messages"][-1].content)
 
 

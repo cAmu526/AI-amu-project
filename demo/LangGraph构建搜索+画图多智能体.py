@@ -55,11 +55,11 @@ graph = workflow.compile()
 if __name__ == "__main__":
     # graph.get_graph().draw_png("workflow.png")
 
-    mermaid_code = graph.get_graph().draw_mermaid()
-    print("\n\n=== Mermaid 流程图代码 ===")
-    print(mermaid_code)
+    # mermaid_code = graph.get_graph().draw_mermaid()
+    # print("\n\n=== Mermaid 流程图代码 ===")
+    # print(mermaid_code)
 
-    # query = "查询 2020-2024 年全球 AI 软件市场规模，然后画一张折线图。"
-    # thread = {"configurable": {"thread_id": "demo"}}
-    # for step in graph.stream({"messages": [HumanMessage(content=query)]}, thread):
-    #     print(step)
+    query = "查询 2020-2024 年全球 AI 软件市场规模，然后画一张折线图。"
+    thread = {"configurable": {"thread_id": "demo"}}
+    for step in graph.stream({"messages": [HumanMessage(content=query)]}, thread):
+        print(step)
