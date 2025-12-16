@@ -29,10 +29,10 @@ if __name__ == '__main__':
     #     {"messages": [{"role": "user", "content": "what is the weather in sf"}]}
     # )
 
-    # inputs = {"messages": [HumanMessage(content="北京的天气怎么样")]}
-    # for chunk in test_agent.stream(inputs):
-    #     print(chunk)
-
-    inputs = {"messages": [HumanMessage(content="世界上石油存储量有多少？")]}
-    for chunk in research_agent.stream(inputs):
+    inputs = {"messages": [HumanMessage(content="帮我查下北京的天气怎么样，然后计算下1加4")]}
+    for chunk in test_agent.stream(inputs):
         print(chunk)
+
+    # inputs = {"messages": [HumanMessage(content="世界上石油存储量有多少？")]}
+    # for chunk in research_agent.stream(inputs):
+    #     print(chunk)
