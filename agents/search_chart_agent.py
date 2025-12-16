@@ -29,7 +29,7 @@ if __name__ == '__main__':
     #     {"messages": [{"role": "user", "content": "what is the weather in sf"}]}
     # )
 
-    inputs = {"messages": [HumanMessage(content="帮我查下北京的天气怎么样，然后计算下1加4")]}
+    inputs = {"messages": [HumanMessage(content="先写一首关于随机某座城市的诗，然后再帮我查下这座城市的天气怎么样，最后才计算下1加4")]}
     for chunk in test_agent.stream(inputs):
         print(chunk)
 
